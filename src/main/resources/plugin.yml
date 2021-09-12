@@ -1,0 +1,15 @@
+name: Man10HighLow
+version: ${project.version}
+main: red.man10.man10highlow.Man10HighLow
+api-version: 1.17
+authors: [ Mr_IK ]
+description: Man10 HighAndLow Plugin
+commands:
+  mhl:
+    description: Man10 HighAndLow
+    usage: /<command>
+    default: op
+  mhlop:
+    description: Man10 HighAndLow OP
+    usage: /<command>
+    default: op

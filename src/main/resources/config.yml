@@ -1,0 +1,15 @@
+#プラグインの起動/停止
+power: true
+#最低BET金額
+minbet: 1000
+#最大BET金額
+maxbet: 1000000
+#必須: データベース設定
+db:
+  sqlite: false
+  mysql:
+    host: localhost
+    port: 3306
+    user: root
+    pass: password
+    db: highlow_db
