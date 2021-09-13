@@ -47,13 +47,14 @@ public class HighLowCommand implements CommandExecutor {
                     p.sendMessage("§c§l現在ゲームは開始されていません！");
                 }
                 p.sendMessage("");
-                p.sendMessage("§e=================================");
+                p.sendMessage("§e==========================");
                 p.sendMessage("§e/mhl open <金額> (ダイス最大値) : ハイ&ローのゲームを開始します");
-                p.sendMessage("§c/mhl high/h : ハイ(ダイス2が上)にベットします");
-                p.sendMessage("§b/mhl low/l : ロー(ダイス2が下)にベットします");
-                p.sendMessage("§a/mhl draw/d : ドロー(引き分け)にベットします");
-                p.sendMessage("§e/mhl stats : 今までの最高獲得金額や合計獲得金額を表示します");
-                p.sendMessage("§e/mhl ranking max/total : 最大/合計獲得金額のランキングを表示します");
+                p.sendMessage("§c/mhl high(h) : ハイ(ダイス2が上)にベットします");
+                p.sendMessage("§b/mhl low(l) : ロー(ダイス2が下)にベットします");
+                p.sendMessage("§a/mhl draw(d) : ドロー(引き分け)にベットします");
+                p.sendMessage("§e/mhl stats : 自分の最高獲得金額や合計獲得金額を表示します");
+                p.sendMessage("§e/mhl ranking max : 最大獲得金額のランキングを表示します");
+                p.sendMessage("§e/mhl ranking total : 合計獲得金額のランキングを表示します");
 
 
                 break;
