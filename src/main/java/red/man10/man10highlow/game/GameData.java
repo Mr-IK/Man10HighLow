@@ -6,9 +6,6 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import red.man10.man10highlow.user.UserData;
@@ -22,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public class GameData implements Listener {
+public class GameData{
 
     public enum BetType{
         HIGH,
@@ -61,8 +58,6 @@ public class GameData implements Listener {
         this.manager = manager;
         this.bet = bet;
 
-        Bukkit.getServer().getPluginManager().registerEvents(this,manager.getPlugin());
-
         // ダイス1は先に決定
         dice1 = randomDiceOne();
 
@@ -84,6 +79,7 @@ public class GameData implements Listener {
 
                 if(time==0){
                     // 抽選開始
+                    betAllow = false;
                     startJudgement();
                     cancel();
                     return;
@@ -104,8 +100,6 @@ public class GameData implements Listener {
         this.manager = manager;
         this.bet = bet;
         this.maxDice = maxDice;
-
-        Bukkit.getServer().getPluginManager().registerEvents(this,manager.getPlugin());
 
         // ダイス1は先に決定
         dice1 = randomDiceOne();
@@ -505,9 +499,7 @@ public class GameData implements Listener {
         bet_draw.remove(uuid);
     }
 
-    @EventHandler
-    public void onLogout(PlayerQuitEvent event){
-        Player p = event.getPlayer();
+    public void logoutPlayer(Player p){
         if(isPlayerJoined(p.getUniqueId())){
             // リストから削除
             removePlayer(p.getUniqueId());

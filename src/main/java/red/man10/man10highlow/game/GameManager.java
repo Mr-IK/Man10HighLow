@@ -2,16 +2,20 @@ package red.man10.man10highlow.game;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 import red.man10.man10highlow.Man10HighLow;
 import red.man10.man10highlow.util.JPYFormat;
 
-public class GameManager {
+public class GameManager implements Listener {
 
     private Man10HighLow plugin;
     public GameData data = null;
 
     public GameManager(Man10HighLow plugin){
         this.plugin = plugin;
+        Bukkit.getPluginManager().registerEvents(this,plugin);
     }
 
     public void startGame(Player p,int bet){
@@ -31,7 +35,6 @@ public class GameManager {
             p.sendMessage(plugin.prefix+"§c§l最大ベット金額(§e§l"+ JPYFormat.getText(plugin.maxbet)+"円§c§l)を上回る金額では開始できません！");
             return;
         }
-        p.sendMessage(plugin.prefix+"§aゲームを開始しています…§f§kAA");
         data = new GameData(this,bet);
     }
 
@@ -88,5 +91,12 @@ public class GameManager {
 
     public Man10HighLow getPlugin(){
         return this.plugin;
+    }
+
+    @EventHandler
+    public void onLogout(PlayerQuitEvent event){
+        if(isGameStarted()){
+            data.logoutPlayer(event.getPlayer());
+        }
     }
 }
