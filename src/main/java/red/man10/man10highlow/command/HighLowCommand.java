@@ -90,6 +90,7 @@ public class HighLowCommand implements CommandExecutor {
                     if(args[1].equalsIgnoreCase("max")){
 
                         Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
+                            p.sendMessage("");
                             p.sendMessage("§e§l========§6§l♚§c§lハイ§a§lアンド§b§lロー§6§l最大獲得金額ランキング♚§e§l========");
                             HashMap<Integer,UserData> maxMap = plugin.userDataManager.getMaxWinTop();
                             for(int i = 1;i<=10;i++){
@@ -99,6 +100,7 @@ public class HighLowCommand implements CommandExecutor {
                                 UserData user = maxMap.get(i);
                                 p.sendMessage("§f§l"+i+"位【"+user.getName()+"】§e§l最大: §f§l"+JPYFormat.getText(user.getMaxWin())+"円  §e§l合計: §f§l"+JPYFormat.getText(user.getTotalWin())+"円");
                             }
+                            p.sendMessage("");
                         });
 
                         break;
@@ -106,6 +108,7 @@ public class HighLowCommand implements CommandExecutor {
                     }else if(args[1].equalsIgnoreCase("total")){
 
                         Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
+                            p.sendMessage("");
                             p.sendMessage("§e§l========§6§l♚§c§lハイ§a§lアンド§b§lロー§6§l合計獲得金額ランキング♚§e§l========");
                             HashMap<Integer,UserData> totalMap = plugin.userDataManager.getTotalWinTop();
                             for(int i = 1;i<=10;i++){
@@ -115,6 +118,7 @@ public class HighLowCommand implements CommandExecutor {
                                 UserData user = totalMap.get(i);
                                 p.sendMessage("§f§l"+i+"位【"+user.getName()+"】§e§l合計: §f§l"+JPYFormat.getText(user.getTotalWin())+"円  §e§l最大: §f§l"+JPYFormat.getText(user.getMaxWin())+"円");
                             }
+                            p.sendMessage("");
                         });
                         break;
 
