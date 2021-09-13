@@ -66,9 +66,9 @@ public class GameData implements Listener {
         // ダイス1は先に決定
         dice1 = randomDiceOne();
 
-        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l"+JPYFormat.getText(bet)+"円で§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
-        sendCommandBroadCast(manager.getPlugin().prefix+"§f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
-        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l結果を予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+" §e§l"+JPYFormat.getText(bet)+"円で§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+" §e§l結果を予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
 
         timeTask = new BukkitRunnable(){
             int time = 120;
@@ -92,9 +92,9 @@ public class GameData implements Listener {
                 // timeが20以上かつ20で割り切れるならBroadcast
                 // つまり、100,80,60,40,20で発動
                 if(time >= 20 && time % 20 == 0){
-                    sendCommandBroadCast(manager.getPlugin().prefix+"§e§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }else if(time == 10 || time <= 5){ // timeが10か5以下ならBroadCast
-                    sendCommandBroadCast(manager.getPlugin().prefix+"§e§lあと"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§lあと"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }
             }
         }.runTaskTimer(manager.getPlugin(),0,20);
@@ -110,9 +110,9 @@ public class GameData implements Listener {
         // ダイス1は先に決定
         dice1 = randomDiceOne();
 
-        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l"+JPYFormat.getText(bet)+"円で§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
-        sendCommandBroadCast(manager.getPlugin().prefix+"§f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
-        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l結果を予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+" §e§l"+JPYFormat.getText(bet)+"円で§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+" §e§l結果を予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
 
         timeTask = new BukkitRunnable(){
             int time = 120;
@@ -136,9 +136,9 @@ public class GameData implements Listener {
                 // timeが20以上かつ20で割り切れるならBroadcast
                 // つまり、100,80,60,40,20で発動
                 if(time >= 20 && time % 20 == 0){
-                    sendCommandBroadCast(manager.getPlugin().prefix+"§e§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }else if(time == 10 || time <= 5){ // timeが10か5以下ならBroadCast
-                    sendCommandBroadCast(manager.getPlugin().prefix+"§e§lあと"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§lあと"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }
             }
         }.runTaskTimer(manager.getPlugin(),0,20);
@@ -160,7 +160,7 @@ public class GameData implements Listener {
             }
             removePlayer(p.getUniqueId());
             addPlayer(p.getUniqueId(),betType);
-            playerBroadcast(manager.getPlugin().prefix+"§e§l"+p.getName()+"§a§lさんがベット先を"+getTypeString(betType)+"§a§lに変更しました！");
+            playerBroadcast(" §e§l"+p.getName()+"§a§lさんがベット先を"+getTypeString(betType)+"§a§lに変更しました！");
             information();
             return;
         }
@@ -175,7 +175,7 @@ public class GameData implements Listener {
         // リストに追加！！
         addPlayer(p.getUniqueId(),betType);
 
-        playerBroadcast(manager.getPlugin().prefix+"§e§l"+p.getName()+"§a§lさんが"+getTypeString(betType)+"§a§lにベットしました！");
+        playerBroadcast(" §e§l"+p.getName()+"§a§lさんが"+getTypeString(betType)+"§a§lにベットしました！");
         information();
     }
 
@@ -187,7 +187,7 @@ public class GameData implements Listener {
             return;
         }
 
-        playerBroadcast(manager.getPlugin().prefix+"§e§l賽は投げられた… §f§l§kAA");
+        playerBroadcast(" §e§l賽は投げられた… §f§l§kAA");
 
         // 実はこの時点で結果は決まっているのだ
         dice2 = randomDice();
@@ -204,7 +204,7 @@ public class GameData implements Listener {
         // 1秒開けて、結果を発表
         Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
             BetType result = getResult();
-            playerBroadcast(manager.getPlugin().prefix+"§e§l結果は… §f§l"+dice2+"§e§l！ "+getTypeString(result)+"§e§lの勝利！");
+            playerBroadcast(" §e§l結果は… §f§l"+dice2+"§e§l！ "+getTypeString(result)+"§e§lの勝利！");
             double winAmount = getWinAmount(result);
             List<UUID> winners;
 
@@ -241,7 +241,7 @@ public class GameData implements Listener {
                        UserData user = udm.getUserData(winner);
                        // 今までの最高獲得金額を更新していれば
                        if(user.getMaxWin()<winAmount){
-                           win.sendMessage(manager.getPlugin().prefix+"§e§l最高獲得金額更新！おめでとう！ §f§l"+JPYFormat.getText(user.getMaxWin())+"円 §e§l⇒ §f§l"+JPYFormat.getText(winAmount)+"円");
+                           win.sendMessage(manager.getPlugin().prefix+" §e§l最高獲得金額更新！おめでとう！ §f§l"+JPYFormat.getText(user.getMaxWin())+"円 §e§l⇒ §f§l"+JPYFormat.getText(winAmount)+"円");
                            udm.updateUserData(winner,(long)scaleCutDown(winAmount), (long)scaleCutDown(user.getTotalWin()+winAmount));
                        }else{
                            udm.updateUserData(winner,user.getMaxWin(), (long)scaleCutDown(user.getTotalWin()+winAmount));
@@ -251,7 +251,7 @@ public class GameData implements Listener {
                        udm.addUserData(win,(long)scaleCutDown(winAmount),(long)scaleCutDown(winAmount));
                    }
                 });
-                playerBroadcast(manager.getPlugin().prefix+"§f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(winAmount)+"円をゲットしました！");
+                playerBroadcast(" §f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(winAmount)+"円をゲットしました！");
             }
 
             isEnd = true;
