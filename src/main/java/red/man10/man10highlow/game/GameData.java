@@ -93,7 +93,7 @@ public class GameData implements Listener {
                 // つまり、100,80,60,40,20で発動
                 if(time >= 20 && time % 20 == 0){
                     sendCommandBroadCast(manager.getPlugin().prefix+" §e§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
-                }else if(time == 10 || time <= 5){ // timeが10か5以下ならBroadCast
+                }else if(time == 10 || time <= 3){ // timeが10か3以下ならBroadCast
                     sendCommandBroadCast(manager.getPlugin().prefix+" §e§lあと"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }
             }
@@ -128,6 +128,7 @@ public class GameData implements Listener {
 
                 if(time==0){
                     // 抽選開始
+                    betAllow = false;
                     startJudgement();
                     cancel();
                     return;
@@ -136,9 +137,9 @@ public class GameData implements Listener {
                 // timeが20以上かつ20で割り切れるならBroadcast
                 // つまり、100,80,60,40,20で発動
                 if(time >= 20 && time % 20 == 0){
-                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                    sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }else if(time == 10 || time <= 5){ // timeが10か5以下ならBroadCast
-                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§lあと"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§lあと§f§l"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }
             }
         }.runTaskTimer(manager.getPlugin(),0,20);
@@ -251,7 +252,7 @@ public class GameData implements Listener {
                        udm.addUserData(win,(long)scaleCutDown(winAmount),(long)scaleCutDown(winAmount));
                    }
                 });
-                playerBroadcast(" §f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(winAmount)+"円をゲットしました！");
+                playerBroadcast(" §f§l"+win.getName()+"§e§lさんは§f§l"+JPYFormat.getText(winAmount)+"円§e§lをゲットしました！");
             }
 
             isEnd = true;
