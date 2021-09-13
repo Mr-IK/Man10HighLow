@@ -181,6 +181,12 @@ public class GameData implements Listener {
 
     // 結果抽選&発表～～～～！！！！
     public void startJudgement(){
+
+        if(!isBattlePossible()){
+            cancelGame("人数不足");
+            return;
+        }
+
         playerBroadcast(manager.getPlugin().prefix+"§e§l賽は投げられた… §f§l§kAA");
 
         // 実はこの時点で結果は決まっているのだ
@@ -476,6 +482,15 @@ public class GameData implements Listener {
     public int randomDiceOne(){
         Random rnd = new Random();
         return rnd.nextInt((maxDice-1)) + 2;
+    }
+
+    // バトルができる状態(二種類以上のベットがされている)かどうか
+    public boolean isBattlePossible(){
+        if(bet_high.size()!=0&&bet_draw.size()!=0){
+            return true;
+        }else if(bet_high.size()!=0&&bet_low.size()!=0) {
+            return true;
+        }else return bet_draw.size() != 0 && bet_low.size() != 0;
     }
 
     // タイプ別当選確率を取得
