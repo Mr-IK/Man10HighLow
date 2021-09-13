@@ -239,9 +239,7 @@ public class GameData{
                 sendBroadCast(manager.getPlugin().prefix+" §e§l…だが、誰も… "+getTypeString(result)+" §e§lにベットしていないのである！");
                 playerBroadcast(" §e§l勝負は引き分けとし、賭け金は返却されます！");
                 playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BANJO,1,0.7f);
-                Bukkit.getScheduler().runTaskLater(manager.getPlugin(), ()->{
-                    playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BANJO,1,0.95f);
-                },10);
+                playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BANJO,1,0.95f);
 
                 isEnd = true;
                 for(UUID uuid:bet_high){
