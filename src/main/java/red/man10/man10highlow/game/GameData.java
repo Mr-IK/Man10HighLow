@@ -205,7 +205,7 @@ public class GameData implements Listener {
         // 1秒開けて、結果を発表
         Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
             BetType result = getResult();
-            playerBroadcast(" §e§l結果は… §f§l"+dice2+"§e§l！ "+getTypeString(result)+"§e§lの勝利！");
+            sendBroadCast(manager.getPlugin().prefix+" §e§l結果は… §f§l"+dice2+"§e§l！ "+getTypeString(result)+"§e§lの勝利！");
             double winAmount = getWinAmount(result);
             List<UUID> winners;
 
@@ -229,6 +229,53 @@ public class GameData implements Listener {
                     winners = new ArrayList<>();
                 }
             }
+
+            if(winners.size()==0){
+                sendBroadCast(manager.getPlugin().prefix+" §e§l…だが、誰も… "+getTypeString(result)+" §e§lにベットしていないのである！");
+                playerBroadcast(" §e§l勝負は引き分けとし、賭け金は返却されます！");
+
+                isEnd = true;
+                for(UUID uuid:bet_high){
+                    Player p = Bukkit.getPlayer(uuid);
+                    if(p==null){
+                        continue;
+                    }
+                    // ポットから取る
+                    pot -= bet;
+                    // お金を返却
+                    manager.getPlugin().vault.deposit(p,bet);
+                }
+                for(UUID uuid:bet_low){
+                    Player p = Bukkit.getPlayer(uuid);
+                    if(p==null){
+                        continue;
+                    }
+                    // ポットから取る
+                    pot -= bet;
+                    // お金を返却
+                    manager.getPlugin().vault.deposit(p,bet);
+                }
+                for(UUID uuid:bet_draw){
+                    Player p = Bukkit.getPlayer(uuid);
+                    if(p==null){
+                        continue;
+                    }
+                    // ポットから取る
+                    pot -= bet;
+                    // お金を返却
+                    manager.getPlugin().vault.deposit(p,bet);
+                }
+
+                bet_high.clear();
+                bet_low.clear();
+                bet_draw.clear();
+                if(timeTask!=null&&!timeTask.isCancelled()){
+                    timeTask.cancel();
+                }
+                manager.endGame();
+                return;
+            }
+
             for(UUID winner : winners){
                 Player win = Bukkit.getPlayer(winner);
                 if(win==null){
@@ -351,22 +398,22 @@ public class GameData implements Listener {
     }
 
     public void information(){
-        playerBroadcast("§b§lハイ§e:"+bet_high.size()+"人  "+
-                "§c§lロー§e:"+bet_low.size()+"人  "+
-                "§a§lドロー§e:"+bet_draw.size()+"人  §e§l合計賭け金:"+JPYFormat.getText(pot)+"円");
+        playerBroadcast("§b§lハイ§e:§f"+bet_high.size()+"人  "+
+                "§c§lロー§e:§f"+bet_low.size()+"人  "+
+                "§a§lドロー§e:§f"+bet_draw.size()+"人  §e§l合計賭け金:§f§l"+JPYFormat.getText(pot)+"円");
     }
 
     public void information(Player p){
-        p.sendMessage("§b§lハイ§e:"+bet_high.size()+"人  "+
-                "§c§lロー§e:"+bet_low.size()+"人  "+
+        p.sendMessage("§b§lハイ§e:§f§l"+bet_high.size()+"人  "+
+                "§c§lロー§e:§f§l"+bet_low.size()+"人  "+
                 "§a§lドロー§e:"+bet_draw.size()+"人  §e§l合計賭け金:"+JPYFormat.getText(pot)+"円");
     }
 
     public void informationPlus(Player p){
-        p.sendMessage("§b§lハイ§e:"+bet_high.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.HIGH)+"§e§l%");
-        p.sendMessage("§c§lロー§e:"+bet_low.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.LOW)+"§e§l%");
-        p.sendMessage("§a§lドロー§e:"+bet_draw.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.DRAW)+"§e§l%");
-        p.sendMessage("§e§l合計賭け金:§f§l"+JPYFormat.getText(pot)+"§e§l円");
+        p.sendMessage("§b§lハイ§e:"+bet_high.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.HIGH)+"%");
+        p.sendMessage("§c§lロー§e:"+bet_low.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.LOW)+"%");
+        p.sendMessage("§a§lドロー§e:"+bet_draw.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.DRAW)+"%");
+        p.sendMessage("§e§l合計賭け金:§f§l"+JPYFormat.getText(pot)+"円");
     }
 
     // ベットした人全員へメッセージを送信
