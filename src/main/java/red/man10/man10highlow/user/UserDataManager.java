@@ -108,6 +108,9 @@ public class UserDataManager {
                 UUID uuid = UUID.fromString(rs.getString("uuid"));
                 UserData user = new UserData(uuid,rs.getString("name"),rs.getLong("max_win"),rs.getLong("total_win"));
                 maxWinMap.put(i,user);
+                if(i==10){
+                    break;
+                }
                 i++;
             }
             qu.close();
@@ -136,6 +139,9 @@ public class UserDataManager {
                 UUID uuid = UUID.fromString(rs.getString("uuid"));
                 UserData user = new UserData(uuid,rs.getString("name"),rs.getLong("max_win"),rs.getLong("total_win"));
                 totalWinMap.put(i,user);
+                if(i==10){
+                    break;
+                }
                 i++;
             }
             qu.close();

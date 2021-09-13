@@ -1,5 +1,6 @@
 package red.man10.man10highlow.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -7,7 +8,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import red.man10.man10highlow.Man10HighLow;
 import red.man10.man10highlow.game.GameData;
+import red.man10.man10highlow.user.UserData;
 import red.man10.man10highlow.util.JPYFormat;
+
+import java.util.HashMap;
 
 public class HighLowCommand implements CommandExecutor {
 
@@ -48,12 +52,28 @@ public class HighLowCommand implements CommandExecutor {
                 p.sendMessage("§c/mhl high/h : ハイ(ダイス2が上)にベットします");
                 p.sendMessage("§b/mhl low/l : ロー(ダイス2が下)にベットします");
                 p.sendMessage("§a/mhl draw/d : ドロー(引き分け)にベットします");
+                p.sendMessage("§e/mhl stats : 今までの最高獲得金額や合計獲得金額を表示します");
+                p.sendMessage("§e/mhl ranking max/total : 最大/合計獲得金額のランキングを表示します");
 
 
                 break;
             }
 
             case 1:{
+
+                if(args[0].equalsIgnoreCase("stats")){
+
+                    Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
+                        if(!plugin.userDataManager.existsUserData(p.getUniqueId())){
+                            p.sendMessage(plugin.prefix+"§c§l勝利したことがないため、データが存在しません");
+                            return;
+                        }
+                        UserData user = plugin.userDataManager.getUserData(p.getUniqueId());
+                        p.sendMessage(plugin.prefix+"§f§l【"+p.getName()+"】§e§l最大: §f§l"+JPYFormat.getText(user.getMaxWin())+"円  §e§l合計: §f§l"+JPYFormat.getText(user.getTotalWin())+"円");
+                    });
+
+                    break;
+                }
 
                 // 85行目付近を参照
                 if(!playerBetCommand(p,args)){
@@ -64,6 +84,43 @@ public class HighLowCommand implements CommandExecutor {
             }
 
             case 2:{
+
+                if(args[0].equalsIgnoreCase("ranking")){
+
+                    if(args[1].equalsIgnoreCase("max")){
+
+                        Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
+                            p.sendMessage("§e§l========§6§l♚最大獲得金額ランキング♚§e§l========");
+                            HashMap<Integer,UserData> maxMap = plugin.userDataManager.getMaxWinTop();
+                            for(int i = 1;i<=10;i++){
+                                if(!maxMap.containsKey(i)){
+                                    break;
+                                }
+                                UserData user = maxMap.get(i);
+                                p.sendMessage("§f§l"+i+"位【"+user.getName()+"】§e§l最大: §f§l"+JPYFormat.getText(user.getMaxWin())+"円  §e§l合計: §f§l"+JPYFormat.getText(user.getTotalWin())+"円");
+                            }
+                        });
+
+                        break;
+
+                    }else if(args[1].equalsIgnoreCase("total")){
+
+                        Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
+                            p.sendMessage("§e§l========§6§l♚合計獲得金額ランキング♚§e§l========");
+                            HashMap<Integer,UserData> totalMap = plugin.userDataManager.getTotalWinTop();
+                            for(int i = 1;i<=10;i++){
+                                if(!totalMap.containsKey(i)){
+                                    break;
+                                }
+                                UserData user = totalMap.get(i);
+                                p.sendMessage("§f§l"+i+"位【"+user.getName()+"】§e§l合計: §f§l"+JPYFormat.getText(user.getTotalWin())+"円  §e§l最大: §f§l"+JPYFormat.getText(user.getMaxWin())+"円");
+                            }
+                        });
+                        break;
+
+                    }
+
+                }
 
                 if(args[0].equalsIgnoreCase("open")){
 

@@ -23,7 +23,7 @@ public class UserData {
         this.total_win = total_win;
     }
 
-    public String getPlayerName() {
+    public String getName() {
         return playerName;
     }
 
