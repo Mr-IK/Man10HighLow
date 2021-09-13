@@ -45,4 +45,15 @@ public final class Man10HighLow extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
     }
+
+    public void configReload(){
+        reloadConfig();
+        config = getConfig();
+        if(power&&gameManager.isGameStarted()&&!config.getBoolean("power")){
+            gameManager.data.cancelGame("プラグイン停止");
+        }
+        power = config.getBoolean("power",false);
+        minbet = config.getInt("minbet",1000);
+        maxbet = config.getInt("maxbet",1000000);
+    }
 }

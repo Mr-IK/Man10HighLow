@@ -13,6 +13,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import red.man10.man10highlow.util.JPYFormat;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,7 +40,7 @@ public class GameData implements Listener {
     BukkitTask timeTask;
 
     // ダイスの最大値
-    int maxDice = 100;
+    public int maxDice = 100;
     // ダイスその1
     int dice1 = 0;
     // ダイスその2
@@ -272,6 +274,13 @@ public class GameData implements Listener {
                 "§a§lドロー§e:"+bet_draw.size()+"人  §e§l合計賭け金:"+JPYFormat.getText(pot)+"円");
     }
 
+    public void informationPlus(Player p){
+        p.sendMessage("§b§lハイ§e:"+bet_high.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.HIGH)+"§e§l%");
+        p.sendMessage("§c§lロー§e:"+bet_low.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.LOW)+"§e§l%");
+        p.sendMessage("§a§lドロー§e:"+bet_draw.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.DRAW)+"§e§l%");
+        p.sendMessage("§e§l合計賭け金:§f§l"+JPYFormat.getText(pot)+"§e§l円");
+    }
+
     // ベットした人全員へメッセージを送信
     public void playerBroadcast(String msg){
         for(UUID uuid:bet_high){
@@ -386,6 +395,33 @@ public class GameData implements Listener {
     public int randomDiceOne(){
         Random rnd = new Random();
         return rnd.nextInt((maxDice-1)) + 2;
+    }
+
+    // タイプ別当選確率を取得
+    public double getChance(BetType betType){
+        switch (betType){
+            case HIGH: {
+                // (最大ダイス-ダイス1) ÷ 最大ダイス * 100
+                return scaleCut((double) (maxDice-dice1) / maxDice * 100);
+            }
+            case LOW: {
+                // (ダイス1 -1) ÷ 最大ダイス * 100
+                return scaleCut((double) (dice1-1) / maxDice * 100);
+            }
+            case DRAW: {
+                // 1 ÷ 最大ダイス * 100
+                return scaleCut((double) 1 / maxDice * 100);
+            }
+        }
+        return -1;
+    }
+
+    // 小数第二位までを四捨五入
+    // 33.333333...みたいなものが 33.3といった結果で帰ってくる
+    public double scaleCut(double percent){
+        BigDecimal bd = new BigDecimal(String.valueOf(percent));
+        BigDecimal bd2 = bd.setScale(1, RoundingMode.HALF_UP);
+        return bd2.doubleValue();
     }
 
     // 結果を取得

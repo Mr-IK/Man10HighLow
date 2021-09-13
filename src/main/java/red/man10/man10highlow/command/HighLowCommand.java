@@ -32,25 +32,23 @@ public class HighLowCommand implements CommandExecutor {
         switch (args.length){
             case 0:{
                 p.sendMessage("§e========"+plugin.prefix+"§e========");
-
+                // ゲームが開始されている場合、情報を表示
                 if(!plugin.power){
                     p.sendMessage("§c§lプラグインは停止中です。");
                     break;
-                }
-
-                p.sendMessage("§e/mhl open <金額> : ハイ&ローのゲームを開始します");
-                p.sendMessage("§c/mhl high/h : ハイ(ダイス2が上)にベットします");
-                p.sendMessage("§b/mhl low/l : ロー(ダイス2が下)にベットします");
-                p.sendMessage("§b/mhl draw/d : ドロー(引き分け)にベットします");
-                p.sendMessage("");
-
-                // ゲームが開始されている場合、情報を表示
-                if(plugin.gameManager.isGameStarted()){
-                    p.sendMessage("§e§l"+ JPYFormat.getText(plugin.gameManager.data.bet)+"円 でゲームが募集中！");
-                    plugin.gameManager.data.information(p);
+                }else if(plugin.gameManager.isGameStarted()){
+                    p.sendMessage("§f§l"+plugin.gameManager.data.maxDice+"§e§l面ダイス "+ JPYFormat.getText(plugin.gameManager.data.bet)+"円 でゲームが募集中！");
+                    plugin.gameManager.data.informationPlus(p);
                 }else{
                     p.sendMessage("§c§l現在ゲームは開始されていません！");
                 }
+                p.sendMessage("");
+                p.sendMessage("§e================================");
+                p.sendMessage("§e/mhl open <金額> (ダイス最大値) : ハイ&ローのゲームを開始します");
+                p.sendMessage("§c/mhl high/h : ハイ(ダイス2が上)にベットします");
+                p.sendMessage("§b/mhl low/l : ロー(ダイス2が下)にベットします");
+                p.sendMessage("§b/mhl draw/d : ドロー(引き分け)にベットします");
+
 
                 break;
             }
@@ -79,6 +77,31 @@ public class HighLowCommand implements CommandExecutor {
                     }
 
                     plugin.gameManager.startGame(p,bet);
+
+                    break;
+                }
+
+                break;
+            }
+
+            case 3:{
+
+                if(args[0].equalsIgnoreCase("open")){
+
+                    int bet;
+                    int dice;
+
+                    try {
+
+                        bet = Integer.parseInt(args[1]);
+                        dice = Integer.parseInt(args[2]);
+
+                    } catch (NumberFormatException mc) {
+                        p.sendMessage(plugin.prefix + "§c§l金額/最大ダイスは数字で指定してください。");
+                        break;
+                    }
+
+                    plugin.gameManager.startGame(p,bet,dice);
 
                     break;
                 }
