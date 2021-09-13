@@ -291,6 +291,7 @@ public class GameData{
                    }else{
                        // データがない場合
                        udm.addUserData(win,(long)scaleCutDown(winAmount),(long)scaleCutDown(winAmount));
+                       win.sendMessage(manager.getPlugin().prefix+" §e§l初勝利おめでとうございます！ §6§l/mhl stats §e§lで最大/合計獲得金額を確認できるようになりました！");
                    }
                 });
                 playerBroadcast(" §f§l"+win.getName()+"§e§lさんは§f§l"+JPYFormat.getText(winAmount)+"円§e§lをゲットしました！");
