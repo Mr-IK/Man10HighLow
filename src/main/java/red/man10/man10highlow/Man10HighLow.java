@@ -14,7 +14,7 @@ public final class Man10HighLow extends JavaPlugin {
     public UserDataManager userDataManager;
     public HighLowCommand command;
     public HighLowCommandOP commandOP;
-    public final String prefix = "§f§l[§d§lMa§f§ln§a§l10§c§lハイ§e§l&§b§lロー§f§l]";
+    public final String prefix = "§f§l[§d§lMa§f§ln§a§l10§c§lハイ§a§l&§b§lロー§f§l]";
 
     public FileConfiguration config;
     public VaultManager vault;

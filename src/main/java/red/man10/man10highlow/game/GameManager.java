@@ -60,7 +60,6 @@ public class GameManager {
             p.sendMessage(plugin.prefix+"§c§lダイスの最大値は100以下を指定してください！");
             return;
         }
-        p.sendMessage(plugin.prefix+"§aゲームを開始しています…§f§kAA");
         data = new GameData(this,bet,maxDice);
     }
 

@@ -481,7 +481,7 @@ public class GameData implements Listener {
     // ダイス 最小値と最大値はでない 2~Max-1
     public int randomDiceOne(){
         Random rnd = new Random();
-        return rnd.nextInt((maxDice-1)) + 2;
+        return rnd.nextInt((maxDice-2)) + 2;
     }
 
     // バトルができる状態(二種類以上のベットがされている)かどうか
