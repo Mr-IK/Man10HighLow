@@ -59,8 +59,8 @@ public class GameManager implements Listener {
             p.sendMessage(plugin.prefix+"§c§lダイスの最大値は3以上を指定してください！");
             return;
         }
-        if(maxDice>100){
-            p.sendMessage(plugin.prefix+"§c§lダイスの最大値は100以下を指定してください！");
+        if(maxDice>10){
+            p.sendMessage(plugin.prefix+"§c§lダイスの最大値は10以下を指定してください！");
             return;
         }
         data = new GameData(this,bet,maxDice);

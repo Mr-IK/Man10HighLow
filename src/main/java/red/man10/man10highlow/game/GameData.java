@@ -43,7 +43,8 @@ public class GameData{
     BukkitTask timeTask;
 
     // ダイスの最大値
-    public int maxDice = 100;
+    // 実質的なデフォルトデータ
+    public int maxDice = 10;
     // ダイスその1
     public int dice1 = 0;
     // ダイスその2
@@ -60,7 +61,7 @@ public class GameData{
         this.bet = bet;
 
         // ダイス1は先に決定
-        dice1 = randomDiceOne();
+        dice1 = randomDice();
 
         sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+JPYFormat.getText(bet)+"円§e§lで§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
         sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
@@ -103,7 +104,7 @@ public class GameData{
         this.maxDice = maxDice;
 
         // ダイス1は先に決定
-        dice1 = randomDiceOne();
+        dice1 = randomDice();
 
         sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+JPYFormat.getText(bet)+"円§e§lで§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
         sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
@@ -154,10 +155,18 @@ public class GameData{
                 p.sendMessage(manager.getPlugin().prefix+"§c§lベット先は既に"+getTypeString(betType)+"§c§lです！");
                 return;
             }
+            if(getChance(betType)==0){
+                p.sendMessage(manager.getPlugin().prefix+"§c§l変更先の当選率は0%です！");
+                return;
+            }
             removePlayer(p.getUniqueId());
             addPlayer(p.getUniqueId(),betType);
             playerBroadcast(" §e§l"+p.getName()+"§a§lさんがベット先を"+getTypeString(betType)+"§a§lに変更しました！");
             information();
+            return;
+        }
+        if(getChance(betType)==0){
+            p.sendMessage(manager.getPlugin().prefix+"§c§lベット先の当選率は0%です！");
             return;
         }
         if(manager.getPlugin().vault.getBalance(p.getUniqueId())<bet){
@@ -419,9 +428,23 @@ public class GameData{
     }
 
     public void informationPlus(Player p){
-        p.sendMessage("§b§lハイ§e:§f"+bet_high.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.HIGH)+"%");
-        p.sendMessage("§c§lロー§e:§f"+bet_low.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.LOW)+"%");
-        p.sendMessage("§a§lドロー§e:§f"+bet_draw.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.DRAW)+"%");
+        if(getChance(BetType.HIGH)==0){
+            p.sendMessage("§b§l§mハイ§e§m:§f§m"+bet_high.size()+"人  §e§l§m当選確率: §f§l§m"+getChance(BetType.HIGH)+"%");
+        }else{
+            p.sendMessage("§b§lハイ§e:§f"+bet_high.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.HIGH)+"%");
+        }
+
+        if(getChance(BetType.LOW)==0){
+            p.sendMessage("§c§l§mロー§e§m:§f§m"+bet_low.size()+"人  §e§l§m当選確率: §f§l§m"+getChance(BetType.LOW)+"%");
+        }else{
+            p.sendMessage("§c§lロー§e:§f"+bet_low.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.LOW)+"%");
+        }
+
+        if(getChance(BetType.DRAW)==0){
+            p.sendMessage("§a§l§mドロー§e§m:§f§m"+bet_draw.size()+"人  §e§l§m当選確率: §f§l§m"+getChance(BetType.DRAW)+"%");
+        }else{
+            p.sendMessage("§a§lドロー§e:§f"+bet_draw.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.DRAW)+"%");
+        }
         p.sendMessage("§e§l合計賭け金:§f§l"+JPYFormat.getText(pot)+"円");
     }
 
