@@ -30,6 +30,9 @@ public class GameData implements Listener {
 
     boolean isEnd = false;
 
+    // ベットが許可されているか
+    boolean betAllow = true;
+
     // 賭け金
     public int bet;
 
@@ -142,6 +145,10 @@ public class GameData implements Listener {
     // プレイヤーのベットを受け付ける
     // お金が絡むので排他処理
     public synchronized void playersBet(Player p,BetType betType){
+        if(!betAllow){
+            p.sendMessage(manager.getPlugin().prefix+"§c§lベットは締め切られました");
+            return;
+        }
         if(isPlayerJoined(p.getUniqueId())){
             // 既に参加済みなのでベットタイプを変更する
             if(getPlayerBetType(p.getUniqueId()).equals(betType)){
@@ -172,7 +179,70 @@ public class GameData implements Listener {
 
     // 結果抽選&発表～～～～！！！！
     public void startJudgement(){
+        playerBroadcast(manager.getPlugin().prefix+"§e§l賽は投げられた… §f§l§kAA");
 
+        // 実はこの時点で結果は決まっているのだ
+        dice2 = randomDice();
+
+        // ﾄﾞｯｸﾝみたいな心拍音をプレイサウンド
+        // 1秒、2秒、3秒で鳴らす。
+        Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
+
+        },20);
+        Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
+
+        },40);
+
+        // 1秒開けて、結果を発表
+        Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
+            BetType result = getResult();
+            playerBroadcast(manager.getPlugin().prefix+"§e§l結果は… §f§l"+dice2+"§e§l！ "+getTypeString(result)+"§e§lの勝利！");
+            double winAmount = getWinAmount(result);
+
+            switch (result){
+                case HIGH:{
+                    for(UUID winner : bet_high){
+                        Player win = Bukkit.getPlayer(winner);
+                        if(win==null){
+                            continue;
+                        }
+                        manager.getPlugin().vault.deposit(win,winAmount);
+                        playerBroadcast(manager.getPlugin().prefix+"§f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(bet)+"円をゲットしました！");
+                    }
+                    break;
+                }
+
+                case LOW:{
+                    for(UUID winner : bet_low){
+                        Player win = Bukkit.getPlayer(winner);
+                        if(win==null){
+                            continue;
+                        }
+                        manager.getPlugin().vault.deposit(win,winAmount);
+                        playerBroadcast(manager.getPlugin().prefix+"§f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(bet)+"円をゲットしました！");
+                    }
+                    break;
+                }
+
+                case DRAW:{
+                    for(UUID winner : bet_draw){
+                        Player win = Bukkit.getPlayer(winner);
+                        if(win==null){
+                            continue;
+                        }
+                        manager.getPlugin().vault.deposit(win,winAmount);
+                        playerBroadcast(manager.getPlugin().prefix+"§f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(bet)+"円をゲットしました！");
+                    }
+                    break;
+                }
+            }
+
+            isEnd = true;
+            if(timeTask!=null&&!timeTask.isCancelled()){
+                timeTask.cancel();
+            }
+            manager.endGame();
+        },80);
     }
 
     // 途中何らかの理由でキャンセルする場合
@@ -414,6 +484,32 @@ public class GameData implements Listener {
             }
         }
         return -1;
+    }
+
+    // 一人当たりの当選金額を取得
+    // potの金額 ÷ 当選人数
+    // 小数点以下は切り捨て
+    public double getWinAmount(BetType result){
+        switch (result){
+            case HIGH: {
+                return scaleCutDown((double) pot / bet_high.size());
+            }
+            case LOW: {
+                return scaleCutDown((double) pot / bet_low.size());
+            }
+            case DRAW: {
+                return scaleCutDown((double) pot / bet_draw.size());
+            }
+        }
+        return -1;
+    }
+
+    // 小数第一位までを切り捨て
+    // 55.5555555...みたいなものが 55といった結果で帰ってくる
+    public int scaleCutDown(double percent){
+        BigDecimal bd = new BigDecimal(String.valueOf(percent));
+        BigDecimal bd2 = bd.setScale(0, RoundingMode.DOWN);
+        return bd2.intValue();
     }
 
     // 小数第二位までを四捨五入
