@@ -45,7 +45,7 @@ public class GameData{
     // ダイスの最大値
     public int maxDice = 100;
     // ダイスその1
-    int dice1 = 0;
+    public int dice1 = 0;
     // ダイスその2
     int dice2 = 0;
 

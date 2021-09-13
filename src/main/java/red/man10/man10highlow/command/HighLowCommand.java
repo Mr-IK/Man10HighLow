@@ -41,7 +41,7 @@ public class HighLowCommand implements CommandExecutor {
                     p.sendMessage("§c§lプラグインは停止中です。");
                     break;
                 }else if(plugin.gameManager.isGameStarted()){
-                    p.sendMessage("§f§l"+plugin.gameManager.data.maxDice+"§e§l面ダイス "+ JPYFormat.getText(plugin.gameManager.data.bet)+"円 でゲームが募集中！");
+                    p.sendMessage("§f§l"+plugin.gameManager.data.maxDice+"§e§l面ダイス §a§l出目:"+plugin.gameManager.data.dice1+" §f§l"+ JPYFormat.getText(plugin.gameManager.data.bet)+"円 でゲームが募集中！");
                     plugin.gameManager.data.informationPlus(p);
                 }else{
                     p.sendMessage("§c§l現在ゲームは開始されていません！");
