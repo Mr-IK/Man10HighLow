@@ -533,9 +533,7 @@ public class GameData implements Listener {
     // 小数第一位までを切り捨て
     // 55.5555555...みたいなものが 55といった結果で帰ってくる
     public int scaleCutDown(double percent){
-        BigDecimal bd = new BigDecimal(String.valueOf(percent));
-        BigDecimal bd2 = bd.setScale(0, RoundingMode.DOWN);
-        return bd2.intValue();
+        return (int)Math.floor(percent);
     }
 
     // 小数第二位までを四捨五入
