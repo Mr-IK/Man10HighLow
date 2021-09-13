@@ -34,6 +34,7 @@ public class HighLowCommandOP implements CommandExecutor {
             p.sendMessage("§e/mhlop setmin <Amount> : 最低ベット金額を<Amount>に設定します");
             p.sendMessage("§e/mhlop setmax <Amount> : 最大ベット金額を<Amount>に設定します");
             p.sendMessage("§e/mhlop reload : コンフィグをリロードします");
+            p.sendMessage("§e/mhlop cashclear : キャッシュデータを削除しメモリを開放します");
             if(plugin.power){
                 p.sendMessage("§a§lプラグインは動作中です。");
             }else{
@@ -62,6 +63,10 @@ public class HighLowCommandOP implements CommandExecutor {
                 plugin.configReload();
 
                 p.sendMessage(plugin.prefix + "§aプラグインをリロードしました。");
+
+            } else if (args[0].equalsIgnoreCase("cashclear")) {
+
+                plugin.userDataManager.cashClear();
 
             } else if (args[0].equalsIgnoreCase("cancel")) {
                 if (!plugin.gameManager.isGameStarted()) {

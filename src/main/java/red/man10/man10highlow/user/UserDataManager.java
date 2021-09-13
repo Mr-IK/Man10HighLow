@@ -16,11 +16,17 @@ public class UserDataManager {
     private SQLManager sql;
 
     // プレイヤーのユーザーデータ
+    // 一度SQLから取得している場合はキャッシュとしてデータが残る
     private HashMap<UUID, UserData> userDataMap = new HashMap<>();
 
     public UserDataManager(Man10HighLow plugin){
         this.plugin = plugin;
         sql = new SQLManager(plugin,"Man10HighLow");
+    }
+
+    // ユーザーデータキャッシュをクリアする(そうそうないとは思うが、メモリ食ってしまった場合用)
+    public void cashClear(){
+        userDataMap.clear();
     }
 
     // ユーザーデータを作成
@@ -29,6 +35,16 @@ public class UserDataManager {
             sql.execute("INSERT INTO mhl_user_stats (name,uuid,max_win,total_win) " +
                     "VALUES ('"+p.getName()+"','"+p.getUniqueId().toString()+"',0,0);");
             UserData user = new UserData(p.getUniqueId(),p.getName(),0L,0L);
+            userDataMap.put(p.getUniqueId(),user);
+        });
+    }
+
+    // ユーザーデータを作成
+    public void addUserData(Player p,Long max_win, Long total_win){
+        Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
+            sql.execute("INSERT INTO mhl_user_stats (name,uuid,max_win,total_win) " +
+                    "VALUES ('"+p.getName()+"','"+p.getUniqueId().toString()+"',"+max_win+","+total_win+");");
+            UserData user = new UserData(p.getUniqueId(),p.getName(),max_win,total_win);
             userDataMap.put(p.getUniqueId(),user);
         });
     }
