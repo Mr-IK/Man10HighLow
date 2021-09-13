@@ -56,7 +56,9 @@ public class HighLowCommand implements CommandExecutor {
             case 1:{
 
                 // 85行目付近を参照
-                playerBetCommand(p,args);
+                if(!playerBetCommand(p,args)){
+                    p.sendMessage(plugin.prefix+"§c存在しないコマンドです！ /mhl で正しいコマンドを確認しましょう！");
+                }
 
                 break;
             }
@@ -80,7 +82,7 @@ public class HighLowCommand implements CommandExecutor {
 
                     break;
                 }
-
+                p.sendMessage(plugin.prefix+"§c存在しないコマンドです！ /mhl で正しいコマンドを確認しましょう！");
                 break;
             }
 
@@ -105,14 +107,17 @@ public class HighLowCommand implements CommandExecutor {
 
                     break;
                 }
-
+                p.sendMessage(plugin.prefix+"§c存在しないコマンドです！ /mhl で正しいコマンドを確認しましょう！");
                 break;
+            }
+            default:{
+                p.sendMessage(plugin.prefix+"§c存在しないコマンドです！ /mhl で正しいコマンドを確認しましょう！");
             }
         }
         return true;
     }
 
-    public void playerBetCommand(Player p, String[] args){
+    public boolean playerBetCommand(Player p, String[] args){
 
         switch (args[0]){
             case "high":
@@ -121,7 +126,7 @@ public class HighLowCommand implements CommandExecutor {
                 // ハイにベット/変更
                 plugin.gameManager.playerBet(p, GameData.BetType.HIGH);
 
-                break;
+                return true;
             }
 
             case "low":
@@ -130,7 +135,7 @@ public class HighLowCommand implements CommandExecutor {
                 // ローにベット/変更
                 plugin.gameManager.playerBet(p, GameData.BetType.LOW);
 
-                break;
+                return true;
             }
 
             case "draw":
@@ -139,7 +144,11 @@ public class HighLowCommand implements CommandExecutor {
                 // ドローにベット/変更
                 plugin.gameManager.playerBet(p, GameData.BetType.DRAW);
 
-                break;
+                return true;
+            }
+
+            default:{
+                return false;
             }
         }
 

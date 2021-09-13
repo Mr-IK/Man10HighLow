@@ -62,15 +62,17 @@ public class HighLowCommandOP implements CommandExecutor {
 
                 plugin.configReload();
 
-                p.sendMessage(plugin.prefix + "§aプラグインをリロードしました。");
+                p.sendMessage(plugin.prefix + "§aコンフィグをリロードしました。");
 
             } else if (args[0].equalsIgnoreCase("cashclear")) {
 
                 plugin.userDataManager.cashClear();
+                p.sendMessage(plugin.prefix + "§aキャッシュデータをクリアしました。");
 
             } else if (args[0].equalsIgnoreCase("cancel")) {
                 if (!plugin.gameManager.isGameStarted()) {
                     p.sendMessage(plugin.prefix + "§cゲームは開かれていません。");
+                    return true;
                 }
 
                 plugin.gameManager.data.cancelGame("運営による強制キャンセル");
@@ -81,6 +83,7 @@ public class HighLowCommandOP implements CommandExecutor {
             if(args[0].equalsIgnoreCase("cancel")){
                 if (!plugin.gameManager.isGameStarted()) {
                     p.sendMessage(plugin.prefix + "§cゲームは開かれていません。");
+                    return true;
                 }
 
                 plugin.gameManager.data.cancelGame(args[1]);
