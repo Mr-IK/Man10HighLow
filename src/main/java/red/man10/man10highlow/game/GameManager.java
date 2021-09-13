@@ -44,6 +44,7 @@ public class GameManager {
             p.sendMessage(plugin.prefix+"§c§lゲームは募集されていません！");
             return;
         }
+        // お金が絡むので一応排他処理
         Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
            data.playersBet(p,type);
         });

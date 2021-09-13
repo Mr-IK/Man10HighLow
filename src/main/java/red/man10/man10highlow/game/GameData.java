@@ -37,6 +37,8 @@ public class GameData implements Listener {
     // 時間カウントのタスク
     BukkitTask timeTask;
 
+    // ダイスの最大値
+    int maxDice = 100;
     // ダイスその1
     int dice1 = 0;
     // ダイスその2
@@ -55,10 +57,10 @@ public class GameData implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this,manager.getPlugin());
 
         // ダイス1は先に決定
-        dice1 = randomDice();
+        dice1 = randomDiceOne();
 
         sendCommandBroadCast(manager.getPlugin().prefix+"§e§l"+JPYFormat.getText(bet)+"円で§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
-        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l100面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+"§f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
         sendCommandBroadCast(manager.getPlugin().prefix+"§e§l結果を予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
 
         timeTask = new BukkitRunnable(){
@@ -75,6 +77,51 @@ public class GameData implements Listener {
 
                 if(time==0){
                     // 抽選開始
+                    startJudgement();
+                    cancel();
+                    return;
+                }
+
+                // timeが20以上かつ20で割り切れるならBroadcast
+                // つまり、100,80,60,40,20で発動
+                if(time >= 20 && time % 20 == 0){
+                    sendCommandBroadCast(manager.getPlugin().prefix+"§e§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                }else if(time == 10 || time <= 5){ // timeが10か5以下ならBroadCast
+                    sendCommandBroadCast(manager.getPlugin().prefix+"§e§lあと"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                }
+            }
+        }.runTaskTimer(manager.getPlugin(),0,20);
+    }
+
+    public GameData(GameManager manager, int bet, int maxDice){
+        this.manager = manager;
+        this.bet = bet;
+        this.maxDice = maxDice;
+
+        Bukkit.getServer().getPluginManager().registerEvents(this,manager.getPlugin());
+
+        // ダイス1は先に決定
+        dice1 = randomDiceOne();
+
+        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l"+JPYFormat.getText(bet)+"円で§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+"§f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l結果を予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+
+        timeTask = new BukkitRunnable(){
+            int time = 120;
+
+            @Override
+            public void run() {
+
+                if(isEnd){
+                    cancel();
+                    return;
+                }
+                time--;
+
+                if(time==0){
+                    // 抽選開始
+                    startJudgement();
                     cancel();
                     return;
                 }
@@ -329,10 +376,16 @@ public class GameData implements Listener {
         }
     }
 
-    // 100面ダイス
+    // 1~maxダイス
     public int randomDice(){
         Random rnd = new Random();
-        return rnd.nextInt(100) + 1;
+        return rnd.nextInt(maxDice) + 1;
+    }
+
+    // ダイス 最小値と最大値はでない 2~Max-1
+    public int randomDiceOne(){
+        Random rnd = new Random();
+        return rnd.nextInt((maxDice-1)) + 2;
     }
 
     // 結果を取得
