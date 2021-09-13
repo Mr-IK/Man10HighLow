@@ -1,5 +1,6 @@
 package red.man10.man10highlow.game;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import red.man10.man10highlow.Man10HighLow;
 import red.man10.man10highlow.util.JPYFormat;
@@ -18,20 +19,38 @@ public class GameManager {
             p.sendMessage(plugin.prefix+"§c§lプラグインは停止中です！");
             return;
         }
-        if(data!=null){
+        if(isGameStarted()){
             p.sendMessage(plugin.prefix+"§c§l既にゲームが開始されています！");
             return;
         }
         if(plugin.minbet>bet){
-            p.sendMessage(plugin.prefix+"§c§l最低BET金額(§e§l"+ JPYFormat.getText(plugin.minbet)+"円§c§l)を下回る金額ではスタートできません！");
+            p.sendMessage(plugin.prefix+"§c§l最低ベット金額(§e§l"+ JPYFormat.getText(plugin.minbet)+"円§c§l)を下回る金額では開始できません！");
             return;
         }
         if(plugin.maxbet<bet){
-            p.sendMessage(plugin.prefix+"§c§l最大BET金額(§e§l"+ JPYFormat.getText(plugin.maxbet)+"円§c§l)を上回る金額ではスタートできません！");
+            p.sendMessage(plugin.prefix+"§c§l最大ベット金額(§e§l"+ JPYFormat.getText(plugin.maxbet)+"円§c§l)を上回る金額では開始できません！");
             return;
         }
         p.sendMessage(plugin.prefix+"§aゲームを開始しています…§f§kAA");
         data = new GameData(this,bet);
+    }
+
+    public void playerBet(Player p, GameData.BetType type){
+        if(!getPlugin().power){
+            p.sendMessage(plugin.prefix+"§c§lプラグインは停止中です！");
+            return;
+        }
+        if(!isGameStarted()){
+            p.sendMessage(plugin.prefix+"§c§lゲームは募集されていません！");
+            return;
+        }
+        Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
+           data.playersBet(p,type);
+        });
+    }
+
+    public boolean isGameStarted(){
+        return data!=null;
     }
 
     public void endGame(){

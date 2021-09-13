@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class GameData implements Listener {
 
-    enum BetType{
+    public enum BetType{
         HIGH,
         LOW,
         DRAW
@@ -29,10 +29,10 @@ public class GameData implements Listener {
     boolean isEnd = false;
 
     // 賭け金
-    int bet;
+    public int bet;
 
     // 賭け金の一時保管
-    long pot = 0;
+    public long pot = 0;
 
     // 時間カウントのタスク
     BukkitTask timeTask;
@@ -57,9 +57,9 @@ public class GameData implements Listener {
         // ダイス1は先に決定
         dice1 = randomDice();
 
-        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l"+JPYFormat.getText(bet)+"円§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
-        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l100面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多い？§c§l少ない？§a§l同じ？","§eクリックで開く！","/mhl");
-        sendCommandBroadCast(manager.getPlugin().prefix+"§e§lうまく予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l"+JPYFormat.getText(bet)+"円で§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l100面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+"§e§l結果を予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
 
         timeTask = new BukkitRunnable(){
             int time = 120;
@@ -97,12 +97,12 @@ public class GameData implements Listener {
             // 既に参加済みなのでベットタイプを変更する
             if(getPlayerBetType(p.getUniqueId()).equals(betType)){
                 // 元々のタイプと同一
-                p.sendMessage(manager.getPlugin().prefix+"§c§lBET先は既に"+getTypeString(betType)+"§c§lです！");
+                p.sendMessage(manager.getPlugin().prefix+"§c§lベット先は既に"+getTypeString(betType)+"§c§lです！");
                 return;
             }
             removePlayer(p.getUniqueId());
             addPlayer(p.getUniqueId(),betType);
-            playerBroadcast(manager.getPlugin().prefix+"§e§l"+p.getName()+"§a§lさんがBET先を"+getTypeString(betType)+"§a§lに変更しました！");
+            playerBroadcast(manager.getPlugin().prefix+"§e§l"+p.getName()+"§a§lさんがベット先を"+getTypeString(betType)+"§a§lに変更しました！");
             information();
             return;
         }
@@ -117,7 +117,7 @@ public class GameData implements Listener {
         // リストに追加！！
         addPlayer(p.getUniqueId(),betType);
 
-        playerBroadcast(manager.getPlugin().prefix+"§e§l"+p.getName()+"§a§lさんが"+getTypeString(betType)+"§a§lにBETしました！");
+        playerBroadcast(manager.getPlugin().prefix+"§e§l"+p.getName()+"§a§lさんが"+getTypeString(betType)+"§a§lにベットしました！");
         information();
     }
 
@@ -215,6 +215,12 @@ public class GameData implements Listener {
 
     public void information(){
         playerBroadcast("§b§lハイ§e:"+bet_high.size()+"人  "+
+                "§c§lロー§e:"+bet_low.size()+"人  "+
+                "§a§lドロー§e:"+bet_draw.size()+"人  §e§l合計賭け金:"+JPYFormat.getText(pot)+"円");
+    }
+
+    public void information(Player p){
+        p.sendMessage("§b§lハイ§e:"+bet_high.size()+"人  "+
                 "§c§lロー§e:"+bet_low.size()+"人  "+
                 "§a§lドロー§e:"+bet_draw.size()+"人  §e§l合計賭け金:"+JPYFormat.getText(pot)+"円");
     }
