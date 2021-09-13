@@ -50,7 +50,7 @@ public class UserDataManager {
     }
 
     // ユーザーデータを更新
-    public void updateItem(UUID uuid,Long max_win,Long total_win){
+    public void updateUserData(UUID uuid,Long max_win,Long total_win){
         Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
             if(!existsUserData(uuid)){
                 return;

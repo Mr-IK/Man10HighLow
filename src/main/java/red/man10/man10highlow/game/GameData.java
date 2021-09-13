@@ -11,6 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import red.man10.man10highlow.user.UserData;
+import red.man10.man10highlow.user.UserDataManager;
 import red.man10.man10highlow.util.JPYFormat;
 
 import java.math.BigDecimal;
@@ -198,43 +200,52 @@ public class GameData implements Listener {
             BetType result = getResult();
             playerBroadcast(manager.getPlugin().prefix+"§e§l結果は… §f§l"+dice2+"§e§l！ "+getTypeString(result)+"§e§lの勝利！");
             double winAmount = getWinAmount(result);
+            List<UUID> winners;
 
             switch (result){
                 case HIGH:{
-                    for(UUID winner : bet_high){
-                        Player win = Bukkit.getPlayer(winner);
-                        if(win==null){
-                            continue;
-                        }
-                        manager.getPlugin().vault.deposit(win,winAmount);
-                        playerBroadcast(manager.getPlugin().prefix+"§f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(bet)+"円をゲットしました！");
-                    }
+                    winners = bet_high;
                     break;
                 }
 
                 case LOW:{
-                    for(UUID winner : bet_low){
-                        Player win = Bukkit.getPlayer(winner);
-                        if(win==null){
-                            continue;
-                        }
-                        manager.getPlugin().vault.deposit(win,winAmount);
-                        playerBroadcast(manager.getPlugin().prefix+"§f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(bet)+"円をゲットしました！");
-                    }
+                    winners = bet_low;
                     break;
                 }
 
                 case DRAW:{
-                    for(UUID winner : bet_draw){
-                        Player win = Bukkit.getPlayer(winner);
-                        if(win==null){
-                            continue;
-                        }
-                        manager.getPlugin().vault.deposit(win,winAmount);
-                        playerBroadcast(manager.getPlugin().prefix+"§f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(bet)+"円をゲットしました！");
-                    }
+                    winners = bet_draw;
                     break;
                 }
+
+                default:{
+                    winners = new ArrayList<>();
+                }
+            }
+            for(UUID winner : winners){
+                Player win = Bukkit.getPlayer(winner);
+                if(win==null){
+                    continue;
+                }
+                manager.getPlugin().vault.deposit(win,winAmount);
+                Bukkit.getScheduler().runTaskAsynchronously(manager.getPlugin(), ()->{
+                    UserDataManager udm = manager.getPlugin().userDataManager;
+                   if(udm.existsUserData(winner)){
+                       // データが存在しているなら
+                       UserData user = udm.getUserData(winner);
+                       // 今までの最高獲得金額を更新していれば
+                       if(user.getMaxWin()<winAmount){
+                           win.sendMessage(manager.getPlugin().prefix+"§e§l最高獲得金額更新！おめでとう！ §f§l"+JPYFormat.getText(user.getMaxWin())+"円 §e§l⇒ §f§l"+JPYFormat.getText(winAmount)+"円");
+                           udm.updateUserData(winner,(long)scaleCutDown(winAmount), (long)scaleCutDown(user.getTotalWin()+winAmount));
+                       }else{
+                           udm.updateUserData(winner,user.getMaxWin(), (long)scaleCutDown(user.getTotalWin()+winAmount));
+                       }
+                   }else{
+                       // データがない場合
+                       udm.addUserData(win,(long)scaleCutDown(winAmount),(long)scaleCutDown(winAmount));
+                   }
+                });
+                playerBroadcast(manager.getPlugin().prefix+"§f§l"+win.getName()+"§e§lさんは"+JPYFormat.getText(winAmount)+"円をゲットしました！");
             }
 
             isEnd = true;
