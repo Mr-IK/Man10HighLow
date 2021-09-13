@@ -66,7 +66,7 @@ public class GameData implements Listener {
         // ダイス1は先に決定
         dice1 = randomDiceOne();
 
-        sendCommandBroadCast(manager.getPlugin().prefix+" §e§l"+JPYFormat.getText(bet)+"円で§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+JPYFormat.getText(bet)+"円§e§lで§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
         sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
         sendCommandBroadCast(manager.getPlugin().prefix+" §e§l結果を予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
 
@@ -92,9 +92,9 @@ public class GameData implements Listener {
                 // timeが20以上かつ20で割り切れるならBroadcast
                 // つまり、100,80,60,40,20で発動
                 if(time >= 20 && time % 20 == 0){
-                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                    sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }else if(time == 10 || time <= 3){ // timeが10か3以下ならBroadCast
-                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§lあと"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
+                    sendCommandBroadCast(manager.getPlugin().prefix+" §e§lあと§f§l"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }
             }
         }.runTaskTimer(manager.getPlugin(),0,20);
@@ -110,7 +110,7 @@ public class GameData implements Listener {
         // ダイス1は先に決定
         dice1 = randomDiceOne();
 
-        sendCommandBroadCast(manager.getPlugin().prefix+" §e§l"+JPYFormat.getText(bet)+"円で§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
+        sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+JPYFormat.getText(bet)+"円§e§lで§c§lハイ§a§lアンド§b§lロー§e§lの募集が開始されました！","§eクリックで開く！","/mhl");
         sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+maxDice+"§e§l面ダイスの出目が §a§l"+dice1+" §e§lより §b§l多いか？§c§l少ないか？§a§l同じか！？","§eクリックで開く！","/mhl");
         sendCommandBroadCast(manager.getPlugin().prefix+" §e§l結果を予想してベットしよう！ §6§l[/mhl]","§eクリックで開く！","/mhl");
 
@@ -138,7 +138,7 @@ public class GameData implements Listener {
                 // つまり、100,80,60,40,20で発動
                 if(time >= 20 && time % 20 == 0){
                     sendCommandBroadCast(manager.getPlugin().prefix+" §f§l"+time+"§e§l秒後、ベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
-                }else if(time == 10 || time <= 5){ // timeが10か5以下ならBroadCast
+                }else if(time == 10 || time <= 3){ // timeが10か3以下ならBroadCast
                     sendCommandBroadCast(manager.getPlugin().prefix+" §e§lあと§f§l"+time+"§e§l秒でベットが締め切られます！ §6§l[/mhl]","§eクリックで開く！","/mhl");
                 }
             }
@@ -410,9 +410,9 @@ public class GameData implements Listener {
     }
 
     public void informationPlus(Player p){
-        p.sendMessage("§b§lハイ§e:"+bet_high.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.HIGH)+"%");
-        p.sendMessage("§c§lロー§e:"+bet_low.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.LOW)+"%");
-        p.sendMessage("§a§lドロー§e:"+bet_draw.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.DRAW)+"%");
+        p.sendMessage("§b§lハイ§e:§f"+bet_high.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.HIGH)+"%");
+        p.sendMessage("§c§lロー§e:§f"+bet_low.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.LOW)+"%");
+        p.sendMessage("§a§lドロー§e:§f"+bet_draw.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.DRAW)+"%");
         p.sendMessage("§e§l合計賭け金:§f§l"+JPYFormat.getText(pot)+"円");
     }
 
