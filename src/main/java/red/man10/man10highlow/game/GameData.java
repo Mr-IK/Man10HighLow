@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -189,12 +190,22 @@ public class GameData{
 
         // ﾄﾞｯｸﾝみたいな心拍音をプレイサウンド
         // 1秒、2秒、3秒で鳴らす。
+        playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM,1,0.5f);
         Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
-
+            playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM,1,1f);
+        },5);
+        Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
+            playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM,1,0.5f);
         },20);
         Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
-
+            playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM,1,1f);
+        },25);
+        Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
+            playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM,1,0.5f);
         },40);
+        Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
+            playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BASEDRUM,1,1f);
+        },45);
 
         // 1秒開けて、結果を発表
         Bukkit.getScheduler().runTaskLater(manager.getPlugin(),()->{
@@ -227,6 +238,10 @@ public class GameData{
             if(winners.size()==0){
                 sendBroadCast(manager.getPlugin().prefix+" §e§l…だが、誰も… "+getTypeString(result)+" §e§lにベットしていないのである！");
                 playerBroadcast(" §e§l勝負は引き分けとし、賭け金は返却されます！");
+                playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BANJO,1,0.7f);
+                Bukkit.getScheduler().runTaskLater(manager.getPlugin(), ()->{
+                    playerPlaySound(Sound.BLOCK_NOTE_BLOCK_BANJO,1,0.95f);
+                },10);
 
                 isEnd = true;
                 for(UUID uuid:bet_high){
@@ -275,6 +290,7 @@ public class GameData{
                 if(win==null){
                     continue;
                 }
+                win.playSound(win.getLocation(),Sound.BLOCK_BELL_USE,1f,2f);
                 manager.getPlugin().vault.deposit(win,winAmount);
                 Bukkit.getScheduler().runTaskAsynchronously(manager.getPlugin(), ()->{
                     UserDataManager udm = manager.getPlugin().userDataManager;
@@ -409,6 +425,31 @@ public class GameData{
         p.sendMessage("§c§lロー§e:§f"+bet_low.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.LOW)+"%");
         p.sendMessage("§a§lドロー§e:§f"+bet_draw.size()+"人  §e§l当選確率: §f§l"+getChance(BetType.DRAW)+"%");
         p.sendMessage("§e§l合計賭け金:§f§l"+JPYFormat.getText(pot)+"円");
+    }
+
+    // ベットした人全員に音を鳴らす
+    public void playerPlaySound(Sound sound,float volume,float pitch){
+        for(UUID uuid:bet_high){
+            Player p = Bukkit.getPlayer(uuid);
+            if(p==null){
+                continue;
+            }
+            p.playSound(p.getLocation(),sound,volume,pitch);
+        }
+        for(UUID uuid:bet_low){
+            Player p = Bukkit.getPlayer(uuid);
+            if(p==null){
+                continue;
+            }
+            p.playSound(p.getLocation(),sound,volume,pitch);
+        }
+        for(UUID uuid:bet_draw){
+            Player p = Bukkit.getPlayer(uuid);
+            if(p==null){
+                continue;
+            }
+            p.playSound(p.getLocation(),sound,volume,pitch);
+        }
     }
 
     // ベットした人全員へメッセージを送信
