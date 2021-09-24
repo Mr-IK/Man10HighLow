@@ -30,6 +30,7 @@ public class HighLowCommandOP implements CommandExecutor {
         if(args.length==0){
             p.sendMessage("§e========"+plugin.prefix+"§e========");
             p.sendMessage("§e/mhlop on/off : プラグインの動作をON/OFFします");
+            p.sendMessage("§e/mhlop safeoff : 進行中のゲームをキャンセルせず、OFFします");
             p.sendMessage("§e/mhlop cancel (reason) : 進行中のゲームをキャンセルします");
             p.sendMessage("§e/mhlop setmin <Amount> : 最低ベット金額を<Amount>に設定します");
             p.sendMessage("§e/mhlop setmax <Amount> : 最大ベット金額を<Amount>に設定します");
@@ -55,6 +56,12 @@ public class HighLowCommandOP implements CommandExecutor {
                 if (plugin.gameManager.isGameStarted()) {
                     plugin.gameManager.data.cancelGame("プラグイン停止");
                 }
+
+                p.sendMessage(plugin.prefix + "§aプラグインの動作をOFFしました。");
+            } else if (args[0].equalsIgnoreCase("safeoff")) {
+                plugin.power = false;
+                plugin.config.set("power", false);
+                plugin.saveConfig();
 
                 p.sendMessage(plugin.prefix + "§aプラグインの動作をOFFしました。");
 
